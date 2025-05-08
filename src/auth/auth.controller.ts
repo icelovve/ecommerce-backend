@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { User } from 'src/user/entities/user.entity';
+// import { User } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +13,12 @@ export class AuthController {
     }
 
     @Post('register')
-    async register(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return await this.authService.register(createUserDto)
+    register(@Body() dto: CreateUserDto & { otp: string }) {
+        return this.authService.register(dto);
+    }
+
+    @Post('send-otp')
+    sendOtp(@Body() body: { email: string }) {
+        return this.authService.sendOtp(body.email);
     }
 }

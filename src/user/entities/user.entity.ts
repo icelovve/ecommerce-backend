@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { IsOptional, IsNumberString, Length } from 'class-validator';
+import { Order } from "src/order/entities/order.entity";
 
 @Entity()
 export class User {
@@ -26,6 +27,9 @@ export class User {
 
     @Column({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
     role: 'admin' | 'user';
+
+    @OneToMany(() => Order, (order) => order.user)
+    orders: Order[];
 
     @CreateDateColumn()
     createdAt: Date;

@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Category } from "src/category/entities/category.entity";
+import { OrderItem } from "src/order/entities/order-item.entity";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 
 @Entity()
 export class Product {
@@ -19,6 +21,13 @@ export class Product {
 
     @Column()
     categoryId: number;
+
+    @ManyToOne(() => Category, (category) => category.products)
+    @JoinColumn({ name: 'categoryId' })
+    category: Category;
+
+    @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
+    orderItems: OrderItem[];
 
     @CreateDateColumn()
     createdAt: Date;

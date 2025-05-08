@@ -33,7 +33,7 @@ export class UserService {
          })
 
          if (!users) {
-            return { message: 'user not found' };
+            return { message: `user ID: ${id} not found` };
          }
 
          return { message: 'user retrieved successfully', users };
@@ -47,12 +47,12 @@ export class UserService {
       const users = await this.userRepository.update(id, updateUserDto)
 
       if (users.affected === 0) {
-         return { message: 'user not found' };
+         return { message: 'user not affected' };
       }
 
       const updateUser = await this.userRepository.findOne({ where: { id } })
       if (!updateUser) {
-         return { message: 'user not found' };
+         return { message: `user ID: ${id} not found` };
       }
 
       return { message: 'user updated successfully' };
@@ -63,7 +63,7 @@ export class UserService {
       try {
          const user = await this.userRepository.findOne({ where: { id } });
          if (!user) {
-            return { message: 'user not found' };
+            return { message: `user ID: ${id} not found` };
          }
          await this.userRepository.delete(id);
          return { message: 'delete successfully' };

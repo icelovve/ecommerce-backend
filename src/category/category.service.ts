@@ -19,7 +19,7 @@ export class CategoryService {
    }
 
    async findAll() {
-      const category = await this.categoryRepository.find();
+      const category = await this.categoryRepository.find({ select: ['id', 'name', 'description'] });
       if (category.length === 0) {
          return { message: 'category not found' };
       }
@@ -29,7 +29,7 @@ export class CategoryService {
    async findOne(id: number) {
       const category = await this.categoryRepository.findOne({ where: { id }, select: ['id', 'name', 'description'] })
       if (!category) {
-         return { message: 'category not found' };
+         return { message: `categoryId ${id} not found` };
       }
 
       return category
@@ -38,12 +38,12 @@ export class CategoryService {
    async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category | { message: string; updateCategory?: Category }> {
       const category = await this.categoryRepository.update(id, updateCategoryDto);
       if (category.affected === 0) {
-         return { message: 'category not found' };
+         return { message: 'category not affected' };
       }
 
       const updateCategory = await this.categoryRepository.findOne({ where: { id } });
       if (!updateCategory) {
-         return { message: 'category not found' };
+         return { message: `categoryId ${id} not found` };
       }
 
       return { message: 'Updated category successfully', updateCategory };
@@ -53,7 +53,7 @@ export class CategoryService {
       const category = await this.categoryRepository.findOne({ where: { id } })
 
       if (!category) {
-         return { message: 'category not found' };
+         return { message: `categoryId ${id} not found` };
       }
 
       await this.categoryRepository.delete(category)

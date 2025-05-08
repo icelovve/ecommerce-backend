@@ -14,12 +14,8 @@ export class ProductController {
   }
 
   @Get()
-  async findAll(): Promise<Product[]> {
-    const result = await this.productService.findAll();
-    if (result.products && result.products.length > 0) {
-      return result.products;
-    }
-    throw new Error(result.message || 'No products found');
+  async findAll(): Promise<{ message: string; products?: Product[] }> {
+    return await this.productService.findAll();
   }
 
   @Get(':id')
